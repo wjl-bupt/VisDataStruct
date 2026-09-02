@@ -15,6 +15,7 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
   /root/datastruct/src/scenes/list_scene.h \
   /root/datastruct/src/scenes/scene.h \
   /root/datastruct/src/scenes/tree_scene.h \
+  /root/datastruct/src/ui/theme.h \
   /root/datastruct/third_party/sdl2/include/SDL2/SDL.h \
   /root/datastruct/third_party/sdl2/include/SDL2/SDL_assert.h \
   /root/datastruct/third_party/sdl2/include/SDL2/SDL_atomic.h \
@@ -409,6 +410,7 @@ CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o: /root/datastruct/src/scenes/l
   /root/datastruct/src/core/ds/linked_list.h \
   /root/datastruct/src/scenes/list_scene.h \
   /root/datastruct/src/scenes/scene.h \
+  /root/datastruct/src/ui/theme.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -715,6 +717,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /root/datastruct/src/layout/tree_layout.h \
   /root/datastruct/src/scenes/scene.h \
   /root/datastruct/src/scenes/tree_scene.h \
+  /root/datastruct/src/ui/theme.h \
   /usr/include/alloca.h \
   /usr/include/asm-generic/errno-base.h \
   /usr/include/asm-generic/errno.h \
@@ -765,6 +768,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /usr/include/c++/9/bits/range_access.h \
   /usr/include/c++/9/bits/refwrap.h \
   /usr/include/c++/9/bits/specfun.h \
+  /usr/include/c++/9/bits/sstream.tcc \
   /usr/include/c++/9/bits/std_abs.h \
   /usr/include/c++/9/bits/std_function.h \
   /usr/include/c++/9/bits/stl_algo.h \
@@ -790,6 +794,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /usr/include/c++/9/bits/stringfwd.h \
   /usr/include/c++/9/bits/uniform_int_dist.h \
   /usr/include/c++/9/bits/unordered_map.h \
+  /usr/include/c++/9/bits/unordered_set.h \
   /usr/include/c++/9/bits/uses_allocator.h \
   /usr/include/c++/9/bits/vector.tcc \
   /usr/include/c++/9/cctype \
@@ -827,6 +832,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /usr/include/c++/9/pstl/glue_algorithm_defs.h \
   /usr/include/c++/9/pstl/pstl_config.h \
   /usr/include/c++/9/queue \
+  /usr/include/c++/9/sstream \
   /usr/include/c++/9/stack \
   /usr/include/c++/9/stdexcept \
   /usr/include/c++/9/stdlib.h \
@@ -850,6 +856,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /usr/include/c++/9/type_traits \
   /usr/include/c++/9/typeinfo \
   /usr/include/c++/9/unordered_map \
+  /usr/include/c++/9/unordered_set \
   /usr/include/c++/9/utility \
   /usr/include/c++/9/vector \
   /usr/include/ctype.h \
@@ -1041,6 +1048,10 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o: /root/datastruct/src/scenes/t
   /usr/lib/gcc/x86_64-linux-gnu/9/include/xtestintrin.h
 
 
+/usr/include/c++/9/bits/unordered_set.h:
+
+/usr/include/c++/9/bits/sstream.tcc:
+
 /usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h:
 
 /usr/include/x86_64-linux-gnu/bits/xopen_lim.h:
@@ -1112,10 +1123,6 @@ _deps/imgui-src/imgui_internal.h:
 /usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vpopcntdqintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vnniintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/9/include/sgxintrin.h:
-
-/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vldqintrin.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vbmivlintrin.h:
 
@@ -1227,6 +1234,8 @@ _deps/imgui-src/imgui_internal.h:
 
 /usr/include/x86_64-linux-gnu/bits/select.h:
 
+/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
+
 /usr/include/c++/9/bits/stl_algo.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/rdseedintrin.h:
@@ -1309,8 +1318,6 @@ _deps/imgui-src/imgui_internal.h:
 
 /usr/include/locale.h:
 
-/usr/include/x86_64-linux-gnu/bits/pthreadtypes-arch.h:
-
 /usr/include/c++/9/bits/allocator.h:
 
 /usr/include/c++/9/bits/shared_ptr.h:
@@ -1353,11 +1360,11 @@ _deps/imgui-src/imgui_internal.h:
 
 /usr/include/c++/9/bits/algorithmfwd.h:
 
-/usr/include/c++/9/bits/unique_ptr.h:
+/usr/include/c++/9/bits/exception_ptr.h:
 
-/usr/include/c++/9/cmath:
+/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
 
-/root/datastruct/src/scenes/list_scene.h:
+/root/datastruct/third_party/sdl2/include/SDL2/SDL_timer.h:
 
 /usr/lib/gcc/x86_64-linux-gnu/9/include/avx512fintrin.h:
 
@@ -1401,8 +1408,6 @@ _deps/imgui-src/imgui_internal.h:
 
 /root/datastruct/third_party/sdl2/include/SDL2/SDL_clipboard.h:
 
-/usr/include/c++/9/bits/stl_algobase.h:
-
 /usr/lib/gcc/x86_64-linux-gnu/9/include/xsavecintrin.h:
 
 /usr/include/alloca.h:
@@ -1427,9 +1432,15 @@ _deps/imgui-src/imgui_internal.h:
 
 /usr/include/x86_64-linux-gnu/bits/sched.h:
 
+/usr/include/c++/9/streambuf:
+
 /root/datastruct/third_party/sdl2/include/SDL2/SDL_filesystem.h:
 
-/usr/include/c++/9/streambuf:
+/usr/include/c++/9/bits/unique_ptr.h:
+
+/usr/include/c++/9/cmath:
+
+/root/datastruct/src/scenes/list_scene.h:
 
 /usr/include/c++/9/bits/deque.tcc:
 
@@ -1446,6 +1457,12 @@ _deps/imgui-src/imgui_internal.h:
 /usr/include/x86_64-linux-gnu/bits/stdint-intn.h:
 
 /usr/include/c++/9/bits/functional_hash.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/sgxintrin.h:
+
+/usr/lib/gcc/x86_64-linux-gnu/9/include/avx512vldqintrin.h:
+
+/root/datastruct/src/ui/theme.h:
 
 /usr/include/x86_64-linux-gnu/gnu/stubs.h:
 
@@ -1489,6 +1506,12 @@ _deps/imgui-src/imgui.h:
 
 /usr/include/x86_64-linux-gnu/bits/cpu-set.h:
 
+/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
+
+/usr/include/c++/9/ios:
+
+/root/datastruct/src/core/ds/linked_list.h:
+
 /usr/lib/gcc/x86_64-linux-gnu/9/include/avx512pfintrin.h:
 
 /usr/include/x86_64-linux-gnu/bits/setjmp.h:
@@ -1502,12 +1525,6 @@ _deps/imgui-src/imgui.h:
 /usr/include/x86_64-linux-gnu/bits/fp-fast.h:
 
 /root/datastruct/src/core/animation/player.h:
-
-/usr/include/x86_64-linux-gnu/bits/types/struct_itimerspec.h:
-
-/usr/include/c++/9/ios:
-
-/root/datastruct/src/core/ds/linked_list.h:
 
 /root/datastruct/src/core/animation/recorder.h:
 
@@ -1547,12 +1564,6 @@ _deps/imgui-src/backends/imgui_impl_sdl2.h:
 
 /root/datastruct/third_party/sdl2/include/SDL2/SDL_hints.h:
 
-/usr/include/c++/9/bits/exception_ptr.h:
-
-/usr/include/x86_64-linux-gnu/bits/flt-eval-method.h:
-
-/root/datastruct/third_party/sdl2/include/SDL2/SDL_timer.h:
-
 /usr/include/c++/9/stdexcept:
 
 /usr/include/x86_64-linux-gnu/sys/cdefs.h:
@@ -1586,6 +1597,8 @@ _deps/imgui-src/imconfig.h:
 /usr/include/c++/9/bits/node_handle.h:
 
 /root/datastruct/third_party/sdl2/include/SDL2/SDL_platform.h:
+
+/usr/include/c++/9/unordered_set:
 
 /usr/include/limits.h:
 
@@ -1640,6 +1653,8 @@ _deps/imgui-src/backends/imgui_impl_sdlrenderer2.h:
 /root/datastruct/src/core/animation/snapshot.h:
 
 /usr/include/c++/9/exception:
+
+/usr/include/c++/9/bits/stl_algobase.h:
 
 /root/datastruct/third_party/sdl2/include/SDL2/SDL_keycode.h:
 
@@ -1808,6 +1823,8 @@ _deps/imgui-src/backends/imgui_impl_sdlrenderer2.h:
 /usr/include/c++/9/tr1/riemann_zeta.tcc:
 
 /usr/include/c++/9/tr1/special_function_util.h:
+
+/usr/include/c++/9/sstream:
 
 /usr/include/x86_64-linux-gnu/bits/timesize.h:
 

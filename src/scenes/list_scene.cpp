@@ -10,6 +10,7 @@
 #define IMGUI_DEFINE_MATH_OPERATORS   // 启用 ImVec2 的 +-*/ 运算符(必须早于 imgui.h)
 #include "imgui.h"
 #include "imgui_internal.h"           // ImRect 在这里
+#include "ui/theme.h"                 // NodeFont(粗体节点标签)
 
 #include <cmath>
 #include <string>
@@ -155,7 +156,7 @@ void ListScene::draw() {
     ImGui::Text("帧 %d / %d", player_.frameIndex() + 1, player_.frameCount());
 
     ImGui::Separator();
-    ImGui::TextColored(ImVec4(1.0f, 0.85f, 0.30f, 1.0f), "步骤: %s",
+    ImGui::TextColored(ImVec4(0.55f, 0.30f, 0.05f, 1.0f), "步骤: %s",
                        player_.currentDesc().c_str());
     ImGui::Separator();
 
@@ -189,16 +190,22 @@ void ListScene::draw() {
         if (!e.weight.empty())
             dl->AddText((a + b) * 0.5f, col, e.weight.c_str());
     }
-    // 再画节点
+    // 再画节点:卡通贴纸风 = 右下硬阴影 + 粉彩填充 + 同色系粗描边 + 粗体标签
+    constexpr float kRad = 12.0f;
     for (const auto& n : frame.nodes) {
         ImVec2 p = pos[n.id];
         ImRect box(p - ImVec2(kBoxW * 0.5f, kBoxH * 0.5f),
                    p + ImVec2(kBoxW * 0.5f, kBoxH * 0.5f));
-        dl->AddRectFilled(box.Min, box.Max, toImU32(n.color), 6.0f);
-        dl->AddRect(box.Min, box.Max, toImU32(Palette::NodeBorder), 6.0f, 0, 1.5f);
+        dl->AddRectFilled(box.Min + ImVec2(3.0f, 4.0f), box.Max + ImVec2(3.0f, 4.0f),
+                          toImU32(Darken(n.color, 0.45f)), kRad);                        // 阴影
+        dl->AddRectFilled(box.Min, box.Max, toImU32(n.color), kRad);                     // 填充
+        dl->AddRect(box.Min, box.Max, toImU32(Darken(n.color, 0.52f)), kRad, 0, 2.5f);   // 描边
+        const bool bold = viz::NodeFont != nullptr;
+        if (bold) ImGui::PushFont(viz::NodeFont);
         ImVec2 ts = ImGui::CalcTextSize(n.label.c_str());
         dl->AddText(ImVec2(p.x - ts.x * 0.5f, p.y - ts.y * 0.5f),
                     toImU32(Palette::NodeText), n.label.c_str());
+        if (bold) ImGui::PopFont();
     }
     ImGui::EndChild();
 }

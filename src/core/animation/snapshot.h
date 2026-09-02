@@ -17,16 +17,20 @@ struct Color {
     }
 };
 
-// 场景通用配色(各场景可自行扩充)
+// 场景通用配色(卡通浅色主题;描边/阴影由 draw 侧用 Darken 派生)
 namespace Palette {
-inline const Color NodeFill   = Color::make(0.23f, 0.27f, 0.32f); // 普通节点
-inline const Color NodeBorder = Color::make(0.60f, 0.66f, 0.72f); // 节点边框
-inline const Color NodeText   = Color::make(0.95f, 0.96f, 0.98f); // 节点文字
-inline const Color Edge       = Color::make(0.55f, 0.58f, 0.62f); // 普通边/指针
-inline const Color Active     = Color::make(1.00f, 0.62f, 0.18f); // 当前访问/比较(橙)
-inline const Color Insert     = Color::make(0.91f, 0.33f, 0.33f); // 新插入(红)
-inline const Color Success    = Color::make(0.36f, 0.78f, 0.42f); // 完成(绿)
+inline const Color NodeFill   = Color::make(0.66f, 0.85f, 0.94f); // 普通节点(粉彩蓝)
+inline const Color NodeText   = Color::make(0.20f, 0.24f, 0.33f); // 节点文字(深蓝灰)
+inline const Color Edge       = Color::make(0.71f, 0.60f, 0.47f); // 边/指针(暖棕)
+inline const Color Active     = Color::make(1.00f, 0.81f, 0.36f); // 当前访问/比较(粉彩黄)
+inline const Color Insert     = Color::make(1.00f, 0.57f, 0.53f); // 新插入(粉彩红)
+inline const Color Success    = Color::make(0.55f, 0.87f, 0.62f); // 完成(粉彩绿)
 } // namespace Palette
+
+// 同色系加深:卡通贴纸风的描边与硬阴影 = 填充色的深色版(k 取 0~1)
+inline Color Darken(const Color& c, float k) {
+    return Color::make(c.r * k, c.g * k, c.b * k, c.a);
+}
 
 struct Snapshot {
     struct Node {

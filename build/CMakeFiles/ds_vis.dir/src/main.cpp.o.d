@@ -186,6 +186,7 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
  /usr/include/c++/9/bits/deque.tcc /usr/include/c++/9/bits/stl_stack.h \
  /usr/include/c++/9/queue /usr/include/c++/9/bits/stl_queue.h \
  /root/datastruct/src/layout/tree_layout.h \
+ /root/datastruct/src/ui/theme.h \
  /root/datastruct/third_party/sdl2/include/SDL2/SDL.h \
  /root/datastruct/third_party/sdl2/include/SDL2/SDL_main.h \
  /root/datastruct/third_party/sdl2/include/SDL2/SDL_stdinc.h \

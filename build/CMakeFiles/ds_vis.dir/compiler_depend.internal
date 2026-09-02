@@ -16,6 +16,7 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o
  /root/datastruct/src/scenes/list_scene.h
  /root/datastruct/src/scenes/scene.h
  /root/datastruct/src/scenes/tree_scene.h
+ /root/datastruct/src/ui/theme.h
  /root/datastruct/third_party/sdl2/include/SDL2/SDL.h
  /root/datastruct/third_party/sdl2/include/SDL2/SDL_assert.h
  /root/datastruct/third_party/sdl2/include/SDL2/SDL_atomic.h
@@ -411,6 +412,7 @@ CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o
  /root/datastruct/src/core/ds/linked_list.h
  /root/datastruct/src/scenes/list_scene.h
  /root/datastruct/src/scenes/scene.h
+ /root/datastruct/src/ui/theme.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h
@@ -718,6 +720,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o
  /root/datastruct/src/layout/tree_layout.h
  /root/datastruct/src/scenes/scene.h
  /root/datastruct/src/scenes/tree_scene.h
+ /root/datastruct/src/ui/theme.h
  /usr/include/alloca.h
  /usr/include/asm-generic/errno-base.h
  /usr/include/asm-generic/errno.h
@@ -768,6 +771,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o
  /usr/include/c++/9/bits/range_access.h
  /usr/include/c++/9/bits/refwrap.h
  /usr/include/c++/9/bits/specfun.h
+ /usr/include/c++/9/bits/sstream.tcc
  /usr/include/c++/9/bits/std_abs.h
  /usr/include/c++/9/bits/std_function.h
  /usr/include/c++/9/bits/stl_algo.h
@@ -793,6 +797,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o
  /usr/include/c++/9/bits/stringfwd.h
  /usr/include/c++/9/bits/uniform_int_dist.h
  /usr/include/c++/9/bits/unordered_map.h
+ /usr/include/c++/9/bits/unordered_set.h
  /usr/include/c++/9/bits/uses_allocator.h
  /usr/include/c++/9/bits/vector.tcc
  /usr/include/c++/9/cctype
@@ -830,6 +835,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o
  /usr/include/c++/9/pstl/glue_algorithm_defs.h
  /usr/include/c++/9/pstl/pstl_config.h
  /usr/include/c++/9/queue
+ /usr/include/c++/9/sstream
  /usr/include/c++/9/stack
  /usr/include/c++/9/stdexcept
  /usr/include/c++/9/stdlib.h
@@ -853,6 +859,7 @@ CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o
  /usr/include/c++/9/type_traits
  /usr/include/c++/9/typeinfo
  /usr/include/c++/9/unordered_map
+ /usr/include/c++/9/unordered_set
  /usr/include/c++/9/utility
  /usr/include/c++/9/vector
  /usr/include/ctype.h

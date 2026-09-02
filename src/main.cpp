@@ -10,6 +10,7 @@
 #include "scenes/list_scene.h"
 #include "scenes/scene.h"
 #include "scenes/tree_scene.h"
+#include "ui/theme.h"
 
 #include <SDL.h>
 
@@ -69,6 +70,7 @@ int main(int, char**) {
     ImGui::CreateContext();
     ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     loadCjkFont();
+    viz::ApplyCartoonTheme();          // 卡通浅色主题(含粗体节点字体)
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
@@ -129,7 +131,7 @@ int main(int, char**) {
         ImGui::Render();
         SDL_RenderSetScale(renderer, ImGui::GetIO().DisplayFramebufferScale.x,
                                    ImGui::GetIO().DisplayFramebufferScale.y);
-        SDL_SetRenderDrawColor(renderer, 26, 30, 35, 255);
+        SDL_SetRenderDrawColor(renderer, 253, 245, 230, 255);   // 奶油底色(与主题一致)
         SDL_RenderClear(renderer);
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
         SDL_RenderPresent(renderer);
