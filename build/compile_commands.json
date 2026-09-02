@@ -1,0 +1,56 @@
+[
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui.cpp.o -c /root/datastruct/build/_deps/imgui-src/imgui.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/imgui.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o -c /root/datastruct/build/_deps/imgui-src/imgui_draw.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/imgui_draw.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_draw.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o -c /root/datastruct/build/_deps/imgui-src/imgui_tables.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/imgui_tables.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_tables.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o -c /root/datastruct/build/_deps/imgui-src/imgui_widgets.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/imgui_widgets.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/imgui_widgets.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl2.cpp.o -c /root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdl2.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdl2.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdl2.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -o CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdlrenderer2.cpp.o -c /root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer2.cpp",
+  "file": "/root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer2.cpp",
+  "output": "CMakeFiles/imgui.dir/_deps/imgui-src/backends/imgui_impl_sdlrenderer2.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/src -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -Wall -Wextra -o CMakeFiles/ds_vis.dir/src/main.cpp.o -c /root/datastruct/src/main.cpp",
+  "file": "/root/datastruct/src/main.cpp",
+  "output": "CMakeFiles/ds_vis.dir/src/main.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/src -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -Wall -Wextra -o CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o -c /root/datastruct/src/scenes/list_scene.cpp",
+  "file": "/root/datastruct/src/scenes/list_scene.cpp",
+  "output": "CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/src -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -Wall -Wextra -o CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o -c /root/datastruct/src/scenes/tree_scene.cpp",
+  "file": "/root/datastruct/src/scenes/tree_scene.cpp",
+  "output": "CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o"
+}
+]
