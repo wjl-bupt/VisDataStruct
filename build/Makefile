@@ -334,6 +334,30 @@ src/scenes/list_scene.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/ds_vis.dir/build.make CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.s
 .PHONY : src/scenes/list_scene.cpp.s
 
+src/scenes/sort_scene.o: src/scenes/sort_scene.cpp.o
+.PHONY : src/scenes/sort_scene.o
+
+# target to build an object file
+src/scenes/sort_scene.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ds_vis.dir/build.make CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o
+.PHONY : src/scenes/sort_scene.cpp.o
+
+src/scenes/sort_scene.i: src/scenes/sort_scene.cpp.i
+.PHONY : src/scenes/sort_scene.i
+
+# target to preprocess a source file
+src/scenes/sort_scene.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ds_vis.dir/build.make CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.i
+.PHONY : src/scenes/sort_scene.cpp.i
+
+src/scenes/sort_scene.s: src/scenes/sort_scene.cpp.s
+.PHONY : src/scenes/sort_scene.s
+
+# target to generate assembly for a file
+src/scenes/sort_scene.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/ds_vis.dir/build.make CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.s
+.PHONY : src/scenes/sort_scene.cpp.s
+
 src/scenes/tree_scene.o: src/scenes/tree_scene.cpp.o
 .PHONY : src/scenes/tree_scene.o
 
@@ -392,6 +416,9 @@ help:
 	@echo "... src/scenes/list_scene.o"
 	@echo "... src/scenes/list_scene.i"
 	@echo "... src/scenes/list_scene.s"
+	@echo "... src/scenes/sort_scene.o"
+	@echo "... src/scenes/sort_scene.i"
+	@echo "... src/scenes/sort_scene.s"
 	@echo "... src/scenes/tree_scene.o"
 	@echo "... src/scenes/tree_scene.i"
 	@echo "... src/scenes/tree_scene.s"

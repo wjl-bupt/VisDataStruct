@@ -1,29 +1,15 @@
-CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
- /usr/include/stdc-predef.h \
- /root/datastruct/build/_deps/imgui-src/imgui.h \
- /root/datastruct/build/_deps/imgui-src/imconfig.h \
- /usr/lib/gcc/x86_64-linux-gnu/9/include/float.h \
- /usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h \
- /usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h /usr/include/string.h \
- /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o: \
+ /root/datastruct/src/scenes/sort_scene.cpp /usr/include/stdc-predef.h \
+ /root/datastruct/src/scenes/sort_scene.h \
+ /root/datastruct/src/core/animation/player.h \
+ /root/datastruct/src/core/animation/snapshot.h /usr/include/c++/9/string \
+ /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
+ /usr/include/x86_64-linux-gnu/c++/9/bits/os_defines.h \
  /usr/include/features.h /usr/include/x86_64-linux-gnu/sys/cdefs.h \
  /usr/include/x86_64-linux-gnu/bits/wordsize.h \
  /usr/include/x86_64-linux-gnu/bits/long-double.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs.h \
  /usr/include/x86_64-linux-gnu/gnu/stubs-64.h \
- /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
- /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
- /usr/include/strings.h \
- /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
- /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
- /usr/include/assert.h \
- /root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdl2.h \
- /root/datastruct/build/_deps/imgui-src/backends/imgui_impl_sdlrenderer2.h \
- /root/datastruct/src/scenes/list_scene.h \
- /root/datastruct/src/core/animation/player.h \
- /root/datastruct/src/core/animation/snapshot.h /usr/include/c++/9/string \
- /usr/include/x86_64-linux-gnu/c++/9/bits/c++config.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/os_defines.h \
  /usr/include/x86_64-linux-gnu/c++/9/bits/cpu_defines.h \
  /usr/include/c++/9/pstl/pstl_config.h \
  /usr/include/c++/9/bits/stringfwd.h /usr/include/c++/9/bits/memoryfwd.h \
@@ -43,14 +29,20 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
  /usr/include/c++/9/bits/ptr_traits.h /usr/include/c++/9/debug/debug.h \
  /usr/include/c++/9/bits/predefined_ops.h \
  /usr/include/c++/9/bits/postypes.h /usr/include/c++/9/cwchar \
- /usr/include/wchar.h /usr/include/x86_64-linux-gnu/bits/floatn.h \
+ /usr/include/wchar.h \
+ /usr/include/x86_64-linux-gnu/bits/libc-header-start.h \
+ /usr/include/x86_64-linux-gnu/bits/floatn.h \
  /usr/include/x86_64-linux-gnu/bits/floatn-common.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/stddef.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/stdarg.h \
  /usr/include/x86_64-linux-gnu/bits/wchar.h \
  /usr/include/x86_64-linux-gnu/bits/types/wint_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__mbstate_t.h \
  /usr/include/x86_64-linux-gnu/bits/types/__FILE.h \
  /usr/include/x86_64-linux-gnu/bits/types/FILE.h \
+ /usr/include/x86_64-linux-gnu/bits/types/locale_t.h \
+ /usr/include/x86_64-linux-gnu/bits/types/__locale_t.h \
  /usr/include/x86_64-linux-gnu/bits/wchar2.h /usr/include/c++/9/cstdint \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/stdint.h /usr/include/stdint.h \
  /usr/include/x86_64-linux-gnu/bits/types.h \
@@ -161,42 +153,20 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
  /usr/include/c++/9/bits/erase_if.h \
  /usr/include/c++/9/pstl/execution_defs.h \
  /root/datastruct/src/core/animation/recorder.h \
- /root/datastruct/src/core/ds/linked_list.h \
  /root/datastruct/src/scenes/scene.h \
- /root/datastruct/src/scenes/sort_scene.h \
- /root/datastruct/src/scenes/tree_scene.h \
- /root/datastruct/src/core/ds/tree_node.h /usr/include/c++/9/iostream \
- /usr/include/c++/9/ostream /usr/include/c++/9/ios \
- /usr/include/c++/9/bits/ios_base.h \
- /usr/include/c++/9/bits/locale_classes.h \
- /usr/include/c++/9/bits/locale_classes.tcc \
- /usr/include/c++/9/system_error \
- /usr/include/x86_64-linux-gnu/c++/9/bits/error_constants.h \
- /usr/include/c++/9/streambuf /usr/include/c++/9/bits/streambuf.tcc \
- /usr/include/c++/9/bits/basic_ios.h \
- /usr/include/c++/9/bits/locale_facets.h /usr/include/c++/9/cwctype \
- /usr/include/wctype.h /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_base.h \
- /usr/include/c++/9/bits/streambuf_iterator.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_inline.h \
- /usr/include/c++/9/bits/locale_facets.tcc \
- /usr/include/c++/9/bits/basic_ios.tcc \
- /usr/include/c++/9/bits/ostream.tcc /usr/include/c++/9/istream \
- /usr/include/c++/9/bits/istream.tcc /usr/include/c++/9/stack \
+ /root/datastruct/src/core/ds/sort_list.h /usr/include/c++/9/stack \
  /usr/include/c++/9/deque /usr/include/c++/9/bits/stl_deque.h \
  /usr/include/c++/9/bits/deque.tcc /usr/include/c++/9/bits/stl_stack.h \
- /usr/include/c++/9/queue /usr/include/c++/9/bits/stl_queue.h \
- /root/datastruct/src/layout/tree_layout.h \
- /root/datastruct/src/ui/theme.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_main.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_stdinc.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_config.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_platform.h \
- /root/datastruct/third_party/sdl2/include/SDL2/begin_code.h \
- /root/datastruct/third_party/sdl2/include/SDL2/close_code.h \
- /usr/include/c++/9/stdlib.h /usr/include/inttypes.h \
- /usr/include/c++/9/math.h /usr/include/c++/9/cmath /usr/include/math.h \
+ /root/datastruct/build/_deps/imgui-src/imgui.h \
+ /root/datastruct/build/_deps/imgui-src/imconfig.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/float.h /usr/include/string.h \
+ /usr/include/strings.h \
+ /usr/include/x86_64-linux-gnu/bits/strings_fortified.h \
+ /usr/include/x86_64-linux-gnu/bits/string_fortified.h \
+ /usr/include/assert.h \
+ /root/datastruct/build/_deps/imgui-src/imgui_internal.h \
+ /usr/include/c++/9/stdlib.h /usr/include/c++/9/math.h \
+ /usr/include/c++/9/cmath /usr/include/math.h \
  /usr/include/x86_64-linux-gnu/bits/math-vector.h \
  /usr/include/x86_64-linux-gnu/bits/libm-simd-decl-stubs.h \
  /usr/include/x86_64-linux-gnu/bits/flt-eval-method.h \
@@ -219,16 +189,14 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
  /usr/include/c++/9/tr1/poly_hermite.tcc \
  /usr/include/c++/9/tr1/poly_laguerre.tcc \
  /usr/include/c++/9/tr1/riemann_zeta.tcc \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_assert.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_atomic.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_audio.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_error.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_endian.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_mutex.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_thread.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_rwops.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_clipboard.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_cpuinfo.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/limits.h \
+ /usr/lib/gcc/x86_64-linux-gnu/9/include/syslimits.h \
+ /usr/include/limits.h /usr/include/x86_64-linux-gnu/bits/posix1_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/local_lim.h \
+ /usr/include/linux/limits.h \
+ /usr/include/x86_64-linux-gnu/bits/posix2_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/xopen_lim.h \
+ /usr/include/x86_64-linux-gnu/bits/uio_lim.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/immintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/mmintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/xmmintrin.h \
@@ -292,51 +260,21 @@ CMakeFiles/ds_vis.dir/src/main.cpp.o: /root/datastruct/src/main.cpp \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/clflushoptintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/wbnoinvdintrin.h \
  /usr/lib/gcc/x86_64-linux-gnu/9/include/pkuintrin.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_events.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_video.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_pixels.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_rect.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_surface.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_blendmode.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_keyboard.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_keycode.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_scancode.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_mouse.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_joystick.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_guid.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_gamecontroller.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_sensor.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_quit.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_gesture.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_touch.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_filesystem.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_haptic.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_hidapi.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_hints.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_loadso.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_log.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_messagebox.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_metal.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_power.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_render.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_shape.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_system.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_timer.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_version.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_locale.h \
- /root/datastruct/third_party/sdl2/include/SDL2/SDL_misc.h \
- /usr/include/c++/9/fstream /usr/include/c++/9/bits/codecvt.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/basic_file.h \
- /usr/include/x86_64-linux-gnu/c++/9/bits/c++io.h \
- /usr/include/c++/9/bits/fstream.tcc /usr/include/c++/9/memory \
- /usr/include/c++/9/bits/stl_raw_storage_iter.h \
- /usr/include/c++/9/ext/concurrence.h \
- /usr/include/c++/9/bits/unique_ptr.h \
- /usr/include/c++/9/bits/shared_ptr.h \
- /usr/include/c++/9/bits/shared_ptr_base.h \
- /usr/include/c++/9/bits/allocated_ptr.h \
- /usr/include/c++/9/bits/shared_ptr_atomic.h \
- /usr/include/c++/9/bits/atomic_base.h \
- /usr/include/c++/9/bits/atomic_lockfree_defines.h \
- /usr/include/c++/9/backward/auto_ptr.h \
- /usr/include/c++/9/pstl/glue_memory_defs.h
+ /root/datastruct/src/ui/theme.h /usr/include/c++/9/sstream \
+ /usr/include/c++/9/istream /usr/include/c++/9/ios \
+ /usr/include/c++/9/bits/ios_base.h \
+ /usr/include/c++/9/bits/locale_classes.h \
+ /usr/include/c++/9/bits/locale_classes.tcc \
+ /usr/include/c++/9/system_error \
+ /usr/include/x86_64-linux-gnu/c++/9/bits/error_constants.h \
+ /usr/include/c++/9/streambuf /usr/include/c++/9/bits/streambuf.tcc \
+ /usr/include/c++/9/bits/basic_ios.h \
+ /usr/include/c++/9/bits/locale_facets.h /usr/include/c++/9/cwctype \
+ /usr/include/wctype.h /usr/include/x86_64-linux-gnu/bits/wctype-wchar.h \
+ /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_base.h \
+ /usr/include/c++/9/bits/streambuf_iterator.h \
+ /usr/include/x86_64-linux-gnu/c++/9/bits/ctype_inline.h \
+ /usr/include/c++/9/bits/locale_facets.tcc \
+ /usr/include/c++/9/bits/basic_ios.tcc /usr/include/c++/9/ostream \
+ /usr/include/c++/9/bits/ostream.tcc /usr/include/c++/9/bits/istream.tcc \
+ /usr/include/c++/9/bits/sstream.tcc

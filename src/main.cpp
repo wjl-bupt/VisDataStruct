@@ -9,6 +9,7 @@
 
 #include "scenes/list_scene.h"
 #include "scenes/scene.h"
+#include "scenes/sort_scene.h"
 #include "scenes/tree_scene.h"
 #include "ui/theme.h"
 
@@ -58,9 +59,10 @@ int main(int, char**) {
         std::fprintf(stderr, "SDL_CreateWindow: %s\n", SDL_GetError());
         return 1;
     }
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1,
-        SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-    if (!renderer) renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
+    // 注意两点:① 不加 PRESENTVSYNC——Xvfb 没有真实垂直同步,SDL 的 vsync 等待会退化成忙等;
+    // ② 用 SOFTWARE 而非 ACCELERATED——Xvfb 上"加速"会落到 llvmpipe(CPU 软件 OpenGL),
+    //    每帧几十毫秒;这个简单 UI 用 2D 软件渲染每帧只要几毫秒。帧率由主循环末尾统一限制。
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_SOFTWARE);
     if (!renderer) {
         std::fprintf(stderr, "SDL_CreateRenderer: %s\n", SDL_GetError());
         return 1;
@@ -78,6 +80,7 @@ int main(int, char**) {
     std::vector<std::unique_ptr<viz::Scene>> scenes;
     scenes.emplace_back(std::make_unique<viz::ListScene>());
     scenes.emplace_back(std::make_unique<viz::TreeScene>());
+    scenes.emplace_back(std::make_unique<viz::SortScene>());
     // scenes.emplace_back(std::make_unique<viz::StackScene>());
     // ...
     int current = 0;
@@ -85,10 +88,14 @@ int main(int, char**) {
     bool running = true;
     Uint64 lastTicks = SDL_GetTicks64();
     while (running) {
+        const Uint64 frameStart = SDL_GetTicks64();
+
         SDL_Event ev;
+        int eventCount = 0;
         while (SDL_PollEvent(&ev)) {
             ImGui_ImplSDL2_ProcessEvent(&ev);
             if (ev.type == SDL_QUIT) running = false;
+            ++eventCount;
         }
 
         Uint64 now = SDL_GetTicks64();
@@ -129,12 +136,28 @@ int main(int, char**) {
         ImGui::End();
 
         ImGui::Render();
-        SDL_RenderSetScale(renderer, ImGui::GetIO().DisplayFramebufferScale.x,
-                                   ImGui::GetIO().DisplayFramebufferScale.y);
-        SDL_SetRenderDrawColor(renderer, 253, 245, 230, 255);   // 奶油底色(与主题一致)
-        SDL_RenderClear(renderer);
-        ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
-        SDL_RenderPresent(renderer);
+
+        // 按需刷新:本环境里 SDL_RenderPresent 走非 SHM 路径,一次 ~47ms(全循环最贵的调用)。
+        // 只在"动画播放中 / 本轮有输入事件 / 每 15 帧保底"时才真正写屏;空闲时跳过,
+        // 主循环降频空转,CPU 从 ~100% 降到个位数。
+        static int framesSincePresent = 0;
+        const bool animating = scenes[current]->isAnimating();
+        const bool needPresent = animating || eventCount > 0 || framesSincePresent >= 15;
+        if (needPresent) {
+            SDL_RenderSetScale(renderer, ImGui::GetIO().DisplayFramebufferScale.x,
+                                       ImGui::GetIO().DisplayFramebufferScale.y);
+            SDL_SetRenderDrawColor(renderer, 253, 245, 230, 255);   // 奶油底色(与主题一致)
+            SDL_RenderClear(renderer);
+            ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData(), renderer);
+            SDL_RenderPresent(renderer);
+            framesSincePresent = 0;
+        } else {
+            ++framesSincePresent;
+        }
+
+        // 帧率限制 30 FPS(动画播放中 present 本身就要 ~47ms,循环自然降到 ~21 FPS)
+        const Uint64 frameMs = SDL_GetTicks64() - frameStart;
+        if (frameMs < 33) SDL_Delay(33 - frameMs);
     }
 
     ImGui_ImplSDLRenderer2_Shutdown();

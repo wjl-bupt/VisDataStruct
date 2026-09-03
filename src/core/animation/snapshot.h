@@ -44,8 +44,14 @@ struct Snapshot {
         std::string weight;  // 权重等附加文字,可为空
         Color color;
     };
+    struct Band {
+        int x0, x1;          // 覆盖的槽位区间(场景坐标系换算,如排序的下标区间)
+        std::string label;   // 区间标注文字
+        Color color;         // 半透明底色
+    };
     std::vector<Node> nodes;
     std::vector<Edge> edges;
+    std::vector<Band> bands; // 区间带(排序场景展示拆分/归并范围)
     std::string desc;        // 本步骤说明,播放时显示
 };
 

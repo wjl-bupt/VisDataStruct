@@ -55,6 +55,12 @@ public:
         working_.edges.push_back(Snapshot::Edge{from, to, weight, color});
     }
 
+    // 区间带(排序场景的拆分/归并范围展示):clear 后逐条 set
+    void clearBands() { working_.bands.clear(); }
+    void setBand(int x0, int x1, const std::string& label, Color color) {
+        working_.bands.push_back(Snapshot::Band{x0, x1, label, color});
+    }
+
     // 把当前工作帧压入时间线,desc 为这一步的文字说明
     void commit(const std::string& desc) {
         working_.desc = desc;

@@ -15,6 +15,7 @@ public:
     virtual const char* name() const = 0;  // Tab 标题
     virtual void update(double dt) = 0;    // 每帧逻辑(通常只调 player_.update(dt))
     virtual void draw() = 0;               // 每帧绘制(ImGui 控件 + 画布)
+    virtual bool isAnimating() const { return false; }   // 动画播放中(主循环据此决定是否刷新画面)
 };
 
 } // namespace viz

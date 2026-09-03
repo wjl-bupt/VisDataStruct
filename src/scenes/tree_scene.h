@@ -27,6 +27,7 @@ public:
     const char* name() const override { return "二叉树"; }
     void update(double dt) override;
     void draw() override;
+    bool isAnimating() const override { return player_.playing() && !player_.atEnd(); }
 
 private:
     void resetDemo();                        // 用列表输入框的内容重建树

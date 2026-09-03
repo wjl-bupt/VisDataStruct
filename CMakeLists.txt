@@ -60,6 +60,7 @@ target_link_libraries(imgui PUBLIC sdl2_local)
 add_executable(ds_vis
     src/main.cpp
     src/scenes/list_scene.cpp
+    src/scenes/sort_scene.cpp
     src/scenes/tree_scene.cpp)
 target_include_directories(ds_vis PRIVATE src)
 target_link_libraries(ds_vis PRIVATE imgui)

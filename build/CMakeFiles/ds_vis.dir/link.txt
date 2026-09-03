@@ -1,1 +1,1 @@
-/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/ds_vis.dir/src/main.cpp.o CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o -o ds_vis  libimgui.a -L/root/datastruct/third_party/sdl2/lib -lSDL2 -lm -ldl -lpthread
+/usr/bin/c++ -O3 -DNDEBUG CMakeFiles/ds_vis.dir/src/main.cpp.o CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o -o ds_vis  libimgui.a -L/root/datastruct/third_party/sdl2/lib -lSDL2 -lm -ldl -lpthread

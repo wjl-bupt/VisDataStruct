@@ -21,6 +21,7 @@ public:
     const char* name() const override { return "链表"; }
     void update(double dt) override;
     void draw() override;
+    bool isAnimating() const override { return player_.playing() && !player_.atEnd(); }
 
 private:
     void resetDemo();                       // 重建初始链表 [2, 4, 6, 8]

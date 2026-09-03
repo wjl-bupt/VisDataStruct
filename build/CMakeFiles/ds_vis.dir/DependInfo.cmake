@@ -10,6 +10,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "/root/datastruct/src/main.cpp" "CMakeFiles/ds_vis.dir/src/main.cpp.o" "gcc" "CMakeFiles/ds_vis.dir/src/main.cpp.o.d"
   "/root/datastruct/src/scenes/list_scene.cpp" "CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o" "gcc" "CMakeFiles/ds_vis.dir/src/scenes/list_scene.cpp.o.d"
+  "/root/datastruct/src/scenes/sort_scene.cpp" "CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o" "gcc" "CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o.d"
   "/root/datastruct/src/scenes/tree_scene.cpp" "CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o" "gcc" "CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o.d"
   )
 

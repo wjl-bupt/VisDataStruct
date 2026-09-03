@@ -49,14 +49,24 @@ cmake --build build -j
 sudo apt install xvfb x11vnc novnc
 ```
 
-### 启动服务栈
+### 日常使用:一条命令
 
 ```bash
-bash scripts/start_remote_vis.sh          # 默认 VNC 密码 ds2026
-# bash scripts/start_remote_vis.sh 我的密码   # 自定义密码
+bash scripts/run.sh               # 启动/恢复环境并拉起程序(幂等,重复执行安全)
 ```
 
-会拉起三个后台进程:`Xvfb :1`、`x11vnc`(端口 5901)、`websockify`(端口 6080)。
+- 活着的组件不会动,只补缺失的;`ds_vis` 以脱离终端的方式启动,**断开 SSH 不受影响**
+- 重新编译后想看新版本:`bash scripts/run.sh --restart`(只重启程序,服务栈不动)
+- 自定义 VNC 密码:`bash scripts/run.sh --restart 我的密码`
+
+脚本末尾有健康检查,缺什么会直接提示去看哪个日志。
+
+### 手动启停(一般用不到)
+
+```bash
+bash scripts/start_remote_vis.sh  # 只启动服务栈(不拉起程序)
+bash scripts/stop_remote_vis.sh   # 完整停止:程序 + 服务栈
+```
 
 ### 本地电脑访问(关键:SSH 端口转发)
 
@@ -81,7 +91,7 @@ http://localhost:6080/vnc.html
 
 ### 运行程序
 
-在容器里(任意一个终端):
+程序由 `run.sh` 自动拉起(已脱离终端);若要手动在前台跑(日志直出):
 
 ```bash
 DISPLAY=:1 ./build/ds_vis
@@ -203,7 +213,7 @@ void ListScene::recordInsert(int val) {
 | 二叉树 / BST / AVL | 递归层次布局,遍历路径高亮,**旋转动画** | ✅ 建树/遍历/深度/宽度/翻转/LCA 已接入用户 BinaryTree;BST 插入为演示实现;AVL 待实现 |
 | 堆 | 树视图 + 数组视图联动,上浮/下沉交换 | 待实现 |
 | 图 | 力导向布局,DFS/BFS 染色,Dijkstra 松弛边 | 待实现 |
-| 排序(冒泡~基数) | 柱状图,比较/交换高亮 | 待实现 |
+| 排序(冒泡~基数) | 柱状图,比较/交换高亮 | ✅ 已接入 7 种:冒泡/改进冒泡/选择/插入/归并(区间带)/快排(显式栈)/计数(负数支持);希尔/堆/基数/桶待实现 |
 | 哈希表 | 桶 + 拉链,冲突动画 | 待实现 |
 | KMP | 主串/模式串双指针,失配回退 | 待实现 |
 

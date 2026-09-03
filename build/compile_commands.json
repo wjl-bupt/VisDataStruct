@@ -49,6 +49,12 @@
 },
 {
   "directory": "/root/datastruct/build",
+  "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/src -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -Wall -Wextra -o CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o -c /root/datastruct/src/scenes/sort_scene.cpp",
+  "file": "/root/datastruct/src/scenes/sort_scene.cpp",
+  "output": "CMakeFiles/ds_vis.dir/src/scenes/sort_scene.cpp.o"
+},
+{
+  "directory": "/root/datastruct/build",
   "command": "/usr/bin/c++ -D_REENTRANT -I/root/datastruct/src -I/root/datastruct/build/_deps/imgui-src -I/root/datastruct/build/_deps/imgui-src/backends -I/root/datastruct/third_party/sdl2/include -I/root/datastruct/third_party/sdl2/include/SDL2 -O3 -DNDEBUG -std=c++17 -Wall -Wextra -o CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o -c /root/datastruct/src/scenes/tree_scene.cpp",
   "file": "/root/datastruct/src/scenes/tree_scene.cpp",
   "output": "CMakeFiles/ds_vis.dir/src/scenes/tree_scene.cpp.o"

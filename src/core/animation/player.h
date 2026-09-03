@@ -78,6 +78,7 @@ public:
 
         Snapshot out;
         out.desc = a.desc;
+        out.bands = a.bands;   // 区间带不插值,直接沿用上一帧(出现/消失即可)
         // 节点:A 有 B 无 → 淡出;A 无 B 有 → 淡入;都有 → 位置/颜色插值
         for (const auto& na : a.nodes) {
             const auto* nb = findNode(b, na.id);
