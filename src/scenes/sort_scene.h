@@ -39,11 +39,12 @@ private:
     float slotSpacing_ = 105.0f;             // 槽位间距(随元素数量自适应收缩)
     float barW_ = 62.0f;                     // 柱宽(随间距收缩)
     int sortedFrom_ = -1;                    // [sortedFrom_, n) 已就位(染绿)
+    bool heapMode_ = false;                  // 堆排序双视图模式(柱子压缩在上,堆树在下)
 
     Recorder rec_;
     Player player_;
 
-    char listBuf_[256] = "38,17,52,9,41,73,24,60,-10,20,86,100,60";  // 待排序数值,逗号/空格分隔
+    char listBuf_[256] = "38,17,52,9,41,73,24,60,20,86,100,60";  // 待排序数值,逗号/空格分隔
     int algo_ = 0;                           // 算法下拉框(目前一种)
     float speed_ = 2.0f;                     // 帧多,默认 2 倍速
 };

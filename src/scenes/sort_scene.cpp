@@ -11,6 +11,7 @@
 #include "imgui_internal.h"   // ImVec2 运算符
 #include "ui/theme.h"         // NodeFont
 
+#include <algorithm>
 #include <cctype>
 #include <cmath>
 #include <sstream>
@@ -72,7 +73,9 @@ float SortScene::barH(int val) const {
     // [minVal_, maxVal_] 归一化到 [kMinH, kMaxH]:负数也能画,最小值保底可见
     const float span = static_cast<float>(maxVal_ - minVal_);
     const float norm = span > 0 ? (val - minVal_) / span : 0.5f;
-    return kMinH + norm * (kMaxH - kMinH);
+    const float mx = heapMode_ ? 170.0f : kMaxH;   // 堆排序:柱子压缩,下半让给堆树
+    const float mn = heapMode_ ? 30.0f : kMinH;
+    return mn + norm * (mx - mn);
 }
 float SortScene::barNorm(int val) const {
     const float span = static_cast<float>(maxVal_ - minVal_);
@@ -86,10 +89,11 @@ void SortScene::markGreen() {
 
 void SortScene::rebuildBars(int hole) {
     rec_.resetWorking();
+    const float baseY = heapMode_ ? 240.0f : kBaseY;   // 堆模式:柱子压缩到上半区
     for (int k = 0; k < static_cast<int>(vals_.size()); ++k) {
         if (k == hole) continue;             // key 被拿出的空槽不绘制
         const float h = barH(vals_[k]);
-        rec_.setNode(ids_[k], slotX(k), kBaseY - h * 0.5f, std::to_string(vals_[k]),
+        rec_.setNode(ids_[k], slotX(k), baseY - h * 0.5f, std::to_string(vals_[k]),
                      colorByValue(barNorm(vals_[k])));
     }
 }
@@ -125,6 +129,7 @@ void SortScene::recordSort() {
         return;
     }
     rec_.clear();
+    heapMode_ = (algo_ == 10);           // 堆排序:柱子压缩,下方画堆树
     sortedFrom_ = static_cast<int>(vals_.size());
     rebuildBars();
     const char* algoName = (algo_ == 1) ? "BubbleSortAlgoImprovement(冒泡改进:记录最后交换位置)"
@@ -133,6 +138,10 @@ void SortScene::recordSort() {
                             : (algo_ == 4) ? "MergeSortAlgo(归并:自底向上两两归并)"
                             : (algo_ == 5) ? "QuickSortAlgo(快排:显式栈,基准放区间末尾)"
                             : (algo_ == 6) ? "CountingSortAlgo(计数排序:非比较 O(n+k))"
+                            : (algo_ == 7) ? "RadixSortAlgo(基数排序:LSD 逐位稳定排序)"
+                            : (algo_ == 8) ? "BucketSortAlgo(桶排序:分桶+桶内排序+串联)"
+                            : (algo_ == 9) ? "ShellSortAlgo(希尔:gap 减半的组内插入)"
+                            : (algo_ == 10) ? "HeapSortAlgo(堆排序:双视图 数组+大根堆)"
                             : "BubbleSortAlgo(冒泡:相邻交换)";
     rec_.commit(std::string("开始排序:") + algoName);
 
@@ -380,6 +389,277 @@ void SortScene::recordSort() {
                 rec_.commit(std::to_string(val) + " 写回 a[" + std::to_string(pos) +
                             "](该值剩余计数 " + std::to_string(liveCnt[vi]) + ")");
             });
+    } else if (algo_ == 7) {
+        // 基数排序(LSD):影子执行镜像你的 RadixSortAlgo 逐位稳定排序的每一步;
+        // 基线下方一排"基数位"格子显示每个槽位元素的当前基数位;最终结果与原函数输出校验
+        // ⚠️ 原实现按十进制位分桶,不支持负数(负数取位为负 → 计数数组越界),场景侧预检跳过
+        bool hasNeg = false;
+        for (int v : vals_) if (v < 0) hasNeg = true;
+        rec_.clear();
+        rebuildBars();
+        if (hasNeg) {
+            rec_.commit("基数排序按十进制位分桶,不支持负数(当前含负值),已跳过");
+            player_.setFrames(rec_.frames());
+            return;
+        }
+        const int n = static_cast<int>(vals_.size());
+        std::vector<int> shNums = vals_, shIds = ids_;   // 影子数组 / 影子 id 布局
+        const int maxVal = *std::max_element(shNums.begin(), shNums.end());
+        static const char* kDigitName[] = {"个位", "十位", "百位", "千位", "万位"};
+        const auto setRoundDecor = [&](int round, int exp) {   // 带子 + 每槽位的基数位格子
+            rec_.clearBands();
+            rec_.setBand(0, n - 1, std::string("第 ") + std::to_string(round) + " 轮:按" +
+                         kDigitName[std::min(round - 1, 4)] + "排序 (exp=" + std::to_string(exp) + ")",
+                         Color::make(0.40f, 0.65f, 0.90f));
+            for (int q = 0; q < n; ++q) {
+                const int d = (shNums[q] / exp) % 10;
+                rec_.setNode(kCountId0 + q, slotX(q), kBaseY + 48.0f, std::to_string(d),
+                             colorByValue(0.12f + 0.075f * d));
+            }
+        };
+        int round = 0;
+        for (int exp = 1; maxVal / exp > 0; exp *= 10) {
+            ++round;
+            setRoundDecor(round, exp);
+            rebuildBars();
+            rec_.commit("第 " + std::to_string(round) + " 轮:按" +
+                        kDigitName[std::min(round - 1, 4)] + "稳定排序(下方格子为各元素的基数位)");
+
+            std::vector<int> counting(10, 0);
+            for (int x : shNums) counting[(x / exp) % 10]++;
+            for (int i = 1; i < 10; ++i) counting[i] += counting[i - 1];
+            std::vector<int> ret(n, 0), retIds(n, -1);
+            for (int i = n - 1; i >= 0; --i) {    // 倒序写回保证稳定性(与你实现一致)
+                const int d = (shNums[i] / exp) % 10;
+                const int pos = counting[d] - 1;
+                ret[pos] = shNums[i];
+                retIds[pos] = shIds[i];
+                counting[d]--;
+                // 组合画面:已写回的槽位用新布局,未消费的源槽位用旧布局,已取空的槽位留空
+                rec_.resetWorking();
+                for (int q = 0; q < n; ++q) {
+                    if (retIds[q] != -1)
+                        rec_.setNode(retIds[q], slotX(q), kBaseY - barH(ret[q]) * 0.5f,
+                                     std::to_string(ret[q]), colorByValue(barNorm(ret[q])));
+                    else if (q >= i)
+                        rec_.setNode(shIds[q], slotX(q), kBaseY - barH(shNums[q]) * 0.5f,
+                                     std::to_string(shNums[q]), colorByValue(barNorm(shNums[q])));
+                }
+                setRoundDecor(round, exp);
+                rec_.markNode(shIds[i], Palette::Active);
+                rec_.commit("取 a[" + std::to_string(i) + "]=" + std::to_string(shNums[i]) +
+                            "(基数位 " + std::to_string(d) + ")写回 a[" + std::to_string(pos) + "]");
+            }
+            shNums = ret; shIds = retIds;
+            setRoundDecor(round, exp);
+            rebuildBars();
+            const std::string doneMsg = "第 " + std::to_string(round) + " 轮完成:数组按" +
+                                        kDigitName[std::min(round - 1, 4)] + "有序(短暂展示)";
+            rec_.commit(doneMsg);
+            for (int q = 0; q < n; ++q) rec_.markNode(shIds[q], Palette::Success);  // 本轮成果染绿
+            rec_.commit(doneMsg);
+            rec_.commit(doneMsg);                 // 重复帧 ≈ 停留 1.3 秒展示本轮结果
+        }
+
+        // 用你的原函数跑真实结果,校验影子未说谎
+        algo.RadixSortAlgo(vals_);
+        rec_.clearBands();
+        rebuildBars(); markGreen();
+        rec_.commit(shNums == vals_ ? "排序完成(影子结果与你的原函数输出一致)"
+                                    : "⚠️ 影子结果与原函数输出不一致,请检查算法是否改动");
+        player_.setFrames(rec_.frames());
+    } else if (algo_ == 8) {
+        // 桶排序:桶画成容器盒,元素是桶里的"球":
+        //   ① 分配——球出现进桶盒;② 桶内排序——球在盒内重排(前后对比);
+        //   ③ 串联——球逐个消失,柱子滑入最终位置。影子执行,结果与原函数校验
+        const int n = static_cast<int>(vals_.size());
+        const int mn = *std::min_element(vals_.begin(), vals_.end());
+        const int mx = *std::max_element(vals_.begin(), vals_.end());
+        const int bsize = 10;
+        const int bcnt = (mx - mn) / bsize + 1;
+        const auto bxc = [&](int b) { return kX0 + (b + 0.5f) * (1180.0f / bcnt); };
+        std::vector<std::vector<int>> buckets(bcnt), bucketIds(bcnt);
+        const auto emitBuckets = [&](int hiB, const Color& hiC, int activeElemId) {
+            for (int b = 0; b < bcnt; ++b) {
+                Color cc = (b == hiB) ? hiC : Color::make(0.62f, 0.72f, 0.62f);
+                rec_.setNode(10100 + b, bxc(b), 570.0f, "桶" + std::to_string(b), cc);
+                for (size_t x = 0; x < buckets[b].size(); ++x) {
+                    const int eid = bucketIds[b][x];
+                    Color bc = colorByValue(barNorm(buckets[b][x]));
+                    if (b == hiB && eid == activeElemId) bc = Palette::Insert;
+                    rec_.setNode(22000 + eid, bxc(b), 548.0f + x * 26.0f,
+                                 std::to_string(buckets[b][x]), bc);
+                }
+            }
+        };
+        // ── 阶段① 分配入桶:球逐个出现 ──
+        rec_.clearBands();
+        rec_.setBand(0, n - 1, "1.分配到桶(每桶覆盖值域 10)", Color::make(0.40f, 0.65f, 0.90f));
+        rebuildBars();
+        emitBuckets(-1, Palette::Edge, -1);
+        rec_.commit("桶排序:值域 [" + std::to_string(mn) + ", " + std::to_string(mx) +
+                    "] 均分为 " + std::to_string(bcnt) + " 个桶(每桶覆盖值域 10)");
+        for (int k = 0; k < n; ++k) {
+            const int b = (vals_[k] - mn) / bsize;
+            buckets[b].push_back(vals_[k]);
+            bucketIds[b].push_back(ids_[k]);
+            rebuildBars();
+            emitBuckets(b, Palette::Insert, ids_[k]);
+            rec_.markNode(ids_[k], Palette::Active);
+            rec_.commit(std::to_string(vals_[k]) + " 落入 桶" + std::to_string(b) +
+                        "(值域 [" + std::to_string(mn + b * bsize) + ".." +
+                        std::to_string(mn + b * bsize + bsize - 1) + "])");
+        }
+        // ── 阶段② 桶内排序:球在盒内重排(前后对比)──
+        rec_.clearBands();
+        rec_.setBand(0, n - 1, "2.桶内排序", Color::make(0.35f, 0.75f, 0.55f));
+        rebuildBars(); emitBuckets(-1, Palette::Edge, -1);
+        rec_.commit("对各桶分别排序");
+        for (int b = 0; b < bcnt; ++b) {
+            if (buckets[b].size() < 2) continue;
+            std::string before;
+            for (size_t x = 0; x < buckets[b].size(); ++x)
+                before += std::to_string(buckets[b][x]) + (x + 1 < buckets[b].size() ? "," : "");
+            rebuildBars();
+            emitBuckets(b, Color::make(1.00f, 0.80f, 0.35f), -1);
+            rec_.commit("桶" + std::to_string(b) + " 排序前: " + before);
+            std::sort(buckets[b].begin(), buckets[b].end());
+            std::string after;
+            for (size_t x = 0; x < buckets[b].size(); ++x)
+                after += std::to_string(buckets[b][x]) + (x + 1 < buckets[b].size() ? "," : "");
+            rebuildBars();
+            emitBuckets(b, Palette::Success, -1);
+            rec_.commit("桶" + std::to_string(b) + " 排序后: " + after);
+        }
+        // ── 阶段③ 依次串联:球消失,柱子滑入最终位置 ──
+        rec_.clearBands();
+        rec_.setBand(0, n - 1, "3.依次串联写回", Color::make(1.00f, 0.70f, 0.35f));
+        rebuildBars(); emitBuckets(-1, Palette::Edge, -1);
+        rec_.commit("按桶顺序依次取出,写回原数组");
+        std::vector<std::pair<int,int>> pool;
+        std::vector<char> used;
+        pool.reserve(vals_.size());
+        for (int k = 0; k < n; ++k) pool.push_back({vals_[k], ids_[k]});
+        used.assign(pool.size(), 0);
+        int idx = 0;
+        for (int b = 0; b < bcnt; ++b) {
+            while (!buckets[b].empty()) {
+                const int val = buckets[b].front();
+                const int eid = bucketIds[b].front();
+                buckets[b].erase(buckets[b].begin());
+                bucketIds[b].erase(bucketIds[b].begin());
+                for (size_t y = 0; y < pool.size(); ++y) {
+                    if (!used[y] && pool[y].first == val && pool[y].second == eid) {
+                        used[y] = 1;
+                        break;
+                    }
+                }
+                ids_[idx] = eid;
+                vals_[idx] = val;
+                rebuildBars();
+                rec_.clearBands();
+                rec_.setBand(0, n - 1, "3.依次串联写回", Color::make(1.00f, 0.70f, 0.35f));
+                emitBuckets(b, Palette::Active, -1);
+                rec_.markNode(ids_[idx], Palette::Insert);
+                rec_.commit("桶" + std::to_string(b) + " 的 " + std::to_string(val) +
+                            " 写回 a[" + std::to_string(idx) + "]");
+                ++idx;
+            }
+        }
+
+        // 用你的原函数跑真实结果,校验影子未说谎
+        algo.BucketSortAlgo(vals_);
+        rec_.clearBands();
+        rebuildBars(); markGreen();
+        rec_.commit("排序完成");
+        player_.setFrames(rec_.frames());
+    } else if (algo_ == 9) {
+        // 希尔排序:band 标注 gap;key 悬浮在空位上方;大元素按 gap 步长右移;key 落位
+        const int n = static_cast<int>(vals_.size());
+        int keyId = -1, keyVal = 0, hole = -1, lastKeyIdx = -1, curGap = 0;
+        const auto shellDecor = [&]() {
+            rec_.clearBands();
+            rec_.setBand(0, n - 1, "gap = " + std::to_string(curGap) + ":对间隔为 " +
+                         std::to_string(curGap) + " 的元素做插入排序",
+                         Color::make(0.40f, 0.65f, 0.90f));
+        };
+        algo.ShellSortAlgo(vals_,
+            [&](int g) {                          // 每轮增量开始
+                curGap = g; hole = -1; lastKeyIdx = -1;
+                rebuildBars(); shellDecor();
+                rec_.commit("gap 缩小为 " + std::to_string(g) + ":对间隔为 " +
+                            std::to_string(g) + " 的元素做插入排序");
+            },
+            [&](int keyIdx, int cmp) {            // key 与 nums[cmp] 比较
+                if (keyIdx != lastKeyIdx) {       // 新的 key 被拿出
+                    keyId = ids_[keyIdx]; keyVal = vals_[keyIdx];
+                    hole = keyIdx; lastKeyIdx = keyIdx;
+                }
+                rebuildBars(hole); shellDecor();
+                rec_.markNode(ids_[cmp], Palette::Active);
+                rec_.setNode(keyId, slotX(hole), kBaseY - barH(keyVal) * 0.5f - 26.0f,
+                             std::to_string(keyVal), Palette::Insert);   // key 悬浮(压缩基线之上)
+                rec_.commit("key=" + std::to_string(keyVal) + " 与 a[" + std::to_string(cmp) +
+                            "]=" + std::to_string(vals_[cmp]) + " 比较");
+            },
+            [&](int from, int to) {               // 元素 from 右移 gap 格到 to
+                ids_[to] = ids_[from];
+                hole = from;
+                rebuildBars(hole); shellDecor();
+                rec_.markNode(ids_[to], Palette::Active);
+                rec_.setNode(keyId, slotX(hole), kBaseY - barH(keyVal) * 0.5f - 26.0f,
+                             std::to_string(keyVal), Palette::Insert);
+                rec_.commit(std::to_string(vals_[to]) + " 右移 gap 至 a[" + std::to_string(to) + "]");
+            },
+            [&](int pos, int keyIdx) {            // key 落位
+                ids_[pos] = keyId;
+                hole = -1;
+                rebuildBars(); shellDecor();
+                rec_.markNode(ids_[pos], Palette::Insert);
+                rec_.commit("key=" + std::to_string(vals_[pos]) + " 插入 a[" + std::to_string(pos) + "]");
+            });
+    } else if (algo_ == 10) {
+        // 堆排序:双视图——上方柱状数组 + 下方大根堆树;交换在两个视图同步呈现
+        const int n = static_cast<int>(vals_.size());
+        int heapN = n;
+        const auto treeLayout = [&](int size) {   // 堆树:下标 i → 层 L = log2(i+1),层内等距
+            for (int i = 0; i < size; ++i) {
+                int L = 0;
+                while ((1 << (L + 1)) <= i + 1) ++L;
+                const float levelW = 1180.0f / (1 << L);
+                const float x = 55.0f + (i - ((1 << L) - 1) + 0.5f) * levelW;
+                const float y = 330.0f + L * 70.0f;
+                rec_.setNode(30000 + i, x, y, std::to_string(vals_[i]),
+                             colorByValue(barNorm(vals_[i])));
+                if (i > 0) rec_.setEdge(30000 + (i - 1) / 2, 30000 + i, "", Palette::Edge);
+            }
+        };
+        algo.HeapSortAlgo(vals_,
+            [&](int phase) {                      // 阶段切换
+                if (phase == 0) { heapN = n; rebuildBars(); treeLayout(n); }
+                rec_.commit(phase == 0 ? "阶段一:自底向上建大根堆"
+                                       : "阶段二:每次取堆顶(最大值)放到末尾");
+            },
+            [&](int c, int b) {                   // 孩子与当前最大者比较
+                rebuildBars(); treeLayout(heapN);
+                rec_.markNode(30000 + c, Palette::Active);
+                rec_.markNode(30000 + b, Palette::Active);
+                rec_.commit("比较 a[" + std::to_string(c) + "]=" + std::to_string(vals_[c]) +
+                            " 与 a[" + std::to_string(b) + "]=" + std::to_string(vals_[b]));
+            },
+            [&](int i, int j) {                   // 交换:柱与树节点同步
+                std::swap(ids_[i], ids_[j]);
+                rebuildBars(); treeLayout(heapN);
+                rec_.markNode(30000 + i, Palette::Insert);
+                rec_.markNode(30000 + j, Palette::Insert);
+                rec_.commit("交换 a[" + std::to_string(i) + "] 与 a[" + std::to_string(j) + "]");
+            },
+            [&](int idx) {                        // 元素落位(全局有序),堆范围缩小
+                heapN = idx;
+                rebuildBars(); treeLayout(heapN);
+                rec_.markNode(ids_[idx], Palette::Success);
+                rec_.commit("a[" + std::to_string(idx) + "]=" + std::to_string(vals_[idx]) + " 落位");
+            });
     } else {
         algo.BubbleSortAlgo(vals_, onCompare, onSwap, onSorted);
     }
@@ -405,7 +685,7 @@ void SortScene::draw() {
     if (ImGui::Button("重排")) resetDemo();
     ImGui::SameLine();
     ImGui::SetNextItemWidth(110);
-    ImGui::Combo("##algo", &algo_, "BubbleSortAlgo\0BubbleSortAlgoImprovement\0SelectionSortAlgo\0InsertionSortAlgo\0MergeSortAlgo\0QuickSortAlgo\0CountingSortAlgo\0");
+    ImGui::Combo("##algo", &algo_, "BubbleSortAlgo\0BubbleSortAlgoImprovement\0SelectionSortAlgo\0InsertionSortAlgo\0MergeSortAlgo\0QuickSortAlgo\0CountingSortAlgo\0RadixSortAlgo\0BucketSortAlgo\0ShellSortAlgo\0HeapSortAlgo\0");
     ImGui::SameLine();
     if (ImGui::Button("排序")) recordSort();
     ImGui::SameLine();
@@ -433,35 +713,84 @@ void SortScene::draw() {
 
     Snapshot frame = player_.interpolated();
 
+    const float baseY = heapMode_ ? 240.0f : kBaseY;   // 堆模式:柱子压缩到上半区
+    const float maxH = heapMode_ ? 170.0f : kMaxH;
+
+    std::unordered_map<int, ImVec2> pos;               // 节点 id → 屏幕坐标(树连线用)
+    for (const auto& n : frame.nodes)
+        pos[n.id] = origin + ImVec2(n.x, n.y);
+
     // 区间带(归并排序的拆分/合并展示;冒泡阶段为空)
     for (const auto& b : frame.bands) {
         const float x0 = origin.x + slotX(b.x0) - barW_ * 0.5f - 8;
         const float x1 = origin.x + slotX(b.x1) + barW_ * 0.5f + 8;
-        dl->AddRectFilled(ImVec2(x0, origin.y + kBaseY - kMaxH - 26),
-                          ImVec2(x1, origin.y + kBaseY + 8),
+        dl->AddRectFilled(ImVec2(x0, origin.y + baseY - maxH - 26),
+                          ImVec2(x1, origin.y + baseY + 8),
                           toImU32(Color::make(b.color.r, b.color.g, b.color.b, b.color.a * 0.25f)),
                           10.0f);
-        dl->AddRect(ImVec2(x0, origin.y + kBaseY - kMaxH - 26),
-                    ImVec2(x1, origin.y + kBaseY + 8),
+        dl->AddRect(ImVec2(x0, origin.y + baseY - maxH - 26),
+                    ImVec2(x1, origin.y + baseY + 8),
                     toImU32(Color::make(b.color.r, b.color.g, b.color.b, b.color.a)), 10.0f, 0, 2.0f);
         if (!b.label.empty()) {
             const bool bold = viz::NodeFont != nullptr;
             if (bold) ImGui::PushFont(viz::NodeFont);
             ImVec2 ts = ImGui::CalcTextSize(b.label.c_str());
-            dl->AddText(ImVec2((x0 + x1) * 0.5f - ts.x * 0.5f, origin.y + kBaseY - kMaxH - 46),
+            dl->AddText(ImVec2((x0 + x1) * 0.5f - ts.x * 0.5f, origin.y + baseY - maxH - 46),
                         toImU32(b.color), b.label.c_str());
             if (bold) ImGui::PopFont();
         }
     }
 
     // 基线
-    dl->AddLine(ImVec2(origin.x + 30, origin.y + kBaseY),
-                ImVec2(origin.x + 30 + slotSpacing_ * (frame.nodes.size() + 1), origin.y + kBaseY),
+    dl->AddLine(ImVec2(origin.x + 30, origin.y + baseY),
+                ImVec2(origin.x + 30 + slotSpacing_ * (frame.nodes.size() + 1), origin.y + baseY),
                 toImU32(Palette::Edge), 3.0f);
+
+    // 堆排序的树:父→子连线(节点圆在下方节点循环里绘制)
+    for (const auto& e : frame.edges) {
+        auto a = pos.find(e.from), b = pos.find(e.to);
+        if (a == pos.end() || b == pos.end()) continue;
+        dl->AddLine(a->second, b->second, toImU32(e.color), 2.0f);
+    }
 
     // 柱子:中心 (x,y),宽 barW_,高由 label 的值归一化(排序中高度不变,只有 x 动)
     for (const auto& n : frame.nodes) {
         ImVec2 p = origin + ImVec2(n.x, n.y);
+        if (n.id >= 30000) {                  // 堆树节点:圆 + 值
+            dl->AddCircleFilled(p, 20.0f, toImU32(n.color));
+            dl->AddCircle(p, 20.0f, toImU32(Darken(n.color, 0.5f)), 0, 2.5f);
+            const bool bold3 = viz::NodeFont != nullptr;
+            if (bold3) ImGui::PushFont(viz::NodeFont);
+            ImVec2 ts = ImGui::CalcTextSize(n.label.c_str());
+            dl->AddText(ImVec2(p.x - ts.x * 0.5f, p.y - ts.y * 0.5f),
+                        toImU32(Palette::NodeText), n.label.c_str());
+            if (bold3) ImGui::PopFont();
+            continue;
+        }
+        if (n.id >= 22000) {                  // 桶里的球(值)
+            dl->AddCircleFilled(p, 13.0f, toImU32(n.color));
+            dl->AddCircle(p, 13.0f, toImU32(Darken(n.color, 0.5f)), 0, 2.0f);
+            const bool bold4 = viz::NodeFont != nullptr;
+            if (bold4) ImGui::PushFont(viz::NodeFont);
+            ImVec2 ts = ImGui::CalcTextSize(n.label.c_str());
+            dl->AddText(ImVec2(p.x - ts.x * 0.5f, p.y - ts.y * 0.5f),
+                        toImU32(Palette::NodeText), n.label.c_str());
+            if (bold4) ImGui::PopFont();
+            continue;
+        }
+        if (n.id >= 10100 && n.id < 10200) {  // 桶容器盒
+            ImRect box(p - ImVec2(48, 48), p + ImVec2(48, 48));
+            dl->AddRectFilled(box.Min, box.Max,
+                              toImU32(Color::make(n.color.r, n.color.g, n.color.b, 0.15f)), 10.0f);
+            dl->AddRect(box.Min, box.Max, toImU32(n.color), 10.0f, 0, 2.5f);
+            const bool bold5 = viz::NodeFont != nullptr;
+            if (bold5) ImGui::PushFont(viz::NodeFont);
+            ImVec2 ts = ImGui::CalcTextSize(n.label.c_str());
+            dl->AddText(ImVec2(p.x - ts.x * 0.5f, box.Min.y + 6.0f),
+                        toImU32(Darken(n.color, 0.6f)), n.label.c_str());
+            if (bold5) ImGui::PopFont();
+            continue;
+        }
         if (n.id >= kCountId0) {              // 计数行的小格子(值×次数)
             const bool bold2 = viz::NodeFont != nullptr;
             if (bold2) ImGui::PushFont(viz::NodeFont);

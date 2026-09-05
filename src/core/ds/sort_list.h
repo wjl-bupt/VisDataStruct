@@ -118,7 +118,37 @@ namespace sortedlist{
                 return nums;
             }
 
-            std::vector<int> ShellSortAlgo(std::vector<int> &nums){
+            // 希尔排序(非递归):gap 减半,对间隔为 gap 的元素做插入排序。
+            // 时间约 O(n^1.3)(依赖增量序列),空间 O(1)。不稳定。
+            // 回调:onGap(g) 每轮增量开始;onCompare(keyIdx, cmp) key 与 nums[cmp] 比较;
+            //       onShift(from, to) 元素 from 右移一格到 to(移动非交换);onInsert(pos, keyIdx) key 落位
+            // ⚠️ 修正:比较必须与 pivot 进行(原实现误写为 nums[j-gap] > nums[j],反例:
+            //    gap=2 的组 [40,45,25] 会被错排成 [40,25,45];中间轮次失去希尔意义)
+            std::vector<int> ShellSortAlgo(std::vector<int> &nums,
+                    const std::function<void(int)>& onGap = nullptr,
+                    const std::function<void(int,int)>& onCompare = nullptr,
+                    const std::function<void(int,int)>& onShift = nullptr,
+                    const std::function<void(int,int)>& onInsert = nullptr){
+
+                int n = nums.size();
+                if(n <= 1) return nums;
+                for(int gap=n/2; gap > 0; gap /= 2){
+                    if(onGap) onGap(gap);
+                    for(int i = gap; i<n; i ++){
+                        int pivot = nums[i];
+                        int j = i;                        // key 被拿出,空位在 i
+                        while(j >= gap){
+                            if(onCompare) onCompare(i, j - gap);
+                            if (nums[j - gap] <= pivot) break;
+                            nums[j] = nums[j - gap];      // 右移 gap 格
+                            if(onShift) onShift(j - gap, j);
+                            j -= gap;
+                        }
+                        nums[j] = pivot;                  // key 落位
+                        if(onInsert) onInsert(j, i);
+                    }
+                }
+
                 return nums;
             }
 
@@ -217,7 +247,33 @@ namespace sortedlist{
                 return nums;
             }
 
-            std::vector<int> HeapSortAlgo(std::vector<int> &nums){
+            // 堆排序(非递归):原地建大根堆,逐个取堆顶(最大值)放到末尾。
+            // 时间 O(n log n)(建堆 O(n)),空间 O(1)。不稳定。
+            // 回调:onPhase(p) 0=建堆阶段 1=排序提取阶段;onCompare(c, b) 孩子与当前最大者比较;
+            //       onSwap(i, j) 交换之后;onSorted(idx) 元素落位(全局有序)
+            // ⚠️ 修正:① heapify 递归改迭代(非递归要求);② 右孩子比较对象由 nums[root]
+            //    改为 nums[largest](原实现反例 [10,50,40] 建堆得 [40,50,10],堆性质被破坏)
+            std::vector<int> HeapSortAlgo(std::vector<int> &nums,
+                    const std::function<void(int)>& onPhase = nullptr,
+                    const std::function<void(int,int)>& onCompare = nullptr,
+                    const std::function<void(int,int)>& onSwap = nullptr,
+                    const std::function<void(int)>& onSorted = nullptr){
+
+                int n = nums.size();
+                if(n <= 1) return nums;
+                if(onPhase) onPhase(0);
+                for(int i=n/2-1; i>=0; i--){
+                    heapify(nums, n, i, onCompare, onSwap);
+                }
+
+                if(onPhase) onPhase(1);
+                for(int i=n-1; i>=0;i--){
+                    // 把堆顶(最大值)放到末尾
+                    std::swap(nums[0], nums[i]);
+                    if(onSwap) onSwap(0, i);
+                    if(onSorted) onSorted(i);
+                    if (i > 0) heapify(nums, i, 0, onCompare, onSwap);
+                }
                 return nums;
             }
 
@@ -254,11 +310,86 @@ namespace sortedlist{
             }
 
             std::vector<int> RadixSortAlgo(std::vector<int> &nums){
+                int n = nums.size();
+                if(n <= 1) return nums;
+                int max_val = *(std::max_element(nums.begin(), nums.end()));
+                // 最大值肯定对应最大的位数，分别除以1,10,100,1000,.....
+                for(int exp=1; max_val / exp > 0; exp *= 10){
+                    // 内部使用couting sort的逻辑排序， couting数组分别对应0-9
+                    std::vector<int> counting(10, 0);
+                    for(auto x:nums){
+                        int digit = (x / exp) % 10;
+                        counting[digit]++;
+                    }
+
+                    //前缀和
+                    for(int i = 1; i<10;i++){
+                        counting[i] = counting[i] + counting[i-1];
+                    }
+
+                    std::vector<int> ret(n, 0);
+                    for(int i=n-1;i>=0;i--){
+                        int digit = (nums[i] / exp) % 10;
+                        ret[counting[digit] - 1] = nums[i];
+                        counting[digit]--;
+                    }
+                    nums = ret;
+                }
                 return nums;
             }
 
             std::vector<int> BucketSortAlgo(std::vector<int> &nums){
+                int n = nums.size();
+                if(n <= 1) return nums; 
+
+                int min_val = *(std::min_element(nums.begin(), nums.end()));
+                int max_val = *(std::max_element(nums.begin(), nums.end()));
+
+                int bucket_size = 10;
+                int bucket_cnt = (max_val - min_val) / bucket_size + 1;
+                std::vector<std::vector<int>> buckets(bucket_cnt);
+
+                for(auto num:nums){
+                    int index = (num - min_val) / bucket_size;
+                    buckets[index].push_back(num);
+                }
+
+                for(auto& bucket:buckets){
+                    std::sort(bucket.begin(), bucket.end());
+                }
+
+                int index = 0;
+                for(auto &bucket:buckets){
+                    for(auto x:bucket){
+                        nums[index++] = x;
+                    }
+                }
+
                 return nums;
+            }
+    
+        private:
+            // 下沉调整(迭代版):节点 i 与其较大孩子比较,小则交换并继续下沉
+            void heapify(std::vector<int> &nums, int n, int root,
+                         const std::function<void(int,int)>& onCompare = nullptr,
+                         const std::function<void(int,int)>& onSwap = nullptr){
+                int i = root;
+                while (true) {
+                    int largest = i;
+                    const int l = 2 * i + 1, r = 2 * i + 2;
+                    if (l < n) {
+                        if(onCompare) onCompare(l, largest);
+                        if (nums[l] > nums[largest]) largest = l;
+                    }
+                    if (r < n) {
+                        if(onCompare) onCompare(r, largest);
+                        if (nums[r] > nums[largest]) largest = r;   // 修正:与最大者比,而非与根比
+                    }
+                    if (largest == i) break;
+                    std::swap(nums[i], nums[largest]);
+                    if(onSwap) onSwap(i, largest);
+                    i = largest;                    // 继续下沉(迭代替代递归)
+                }
             }
 
     };
